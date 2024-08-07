@@ -24,7 +24,50 @@ const addBookmark = asyncNow(async (req, res) => {
   res.status(201).json(addUp);
 });
 
+const editBookMark = asyncNow(async (req, res) => {
+  const editBook = await bookMark.findById(req.params.id);
+
+  if (!editBook) {
+    res.status(404);
+    throw new Error("Not Found");
+  }
+
+  const updateBook = await bookMark.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
+
+  res.status(200).json(updateBook);
+});
+
+const getOneBookMark = asyncNow(async (req, res) => {
+  const oneBookMark = await bookMark.findById(req.params.id);
+
+  if (!oneBookMark) {
+    res.status(404);
+    throw new Error("Not Found");
+  }
+
+  res.status(200).json(oneBookMark);
+});
+
+const deleteBookMark = asyncNow(async (req, res) => {
+  const deleteBookMark = await bookMark.findById(req.params.id);
+
+  if (!deleteBookMark) {
+    res.status(404);
+    throw new Error("Not Found");
+  }
+
+  await deleteBookMark.deleteOne();
+  res.status(200).json({
+    message: `Successfully delete book mark with the ${req.params.id}`,
+  });
+});
+
 module.exports = {
   getAllInfo,
   addBookmark,
+  deleteBookMark,
+  getOneBookMark,
+  editBookMark,
 };
