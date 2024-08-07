@@ -1,18 +1,23 @@
 const mongo = require("mongoose");
 
-const addTask = mongo.Schema(
+const bookMark = mongo.Schema(
   {
-    infoName: {
+    bookMarkName: {
       type: String,
       require: [true, "Please enter information name"],
     },
 
-    infoLink: {
+    bookMarkLink: {
       type: String,
       require: [true, "Please enter information link"],
     },
 
-    infoDesc: {
+    bookMarkValue: {
+      type: String,
+      require: [true, "Please enter information link"],
+    },
+
+    bookMarkDesc: {
       type: String,
       require: [true, "Please enter information description"],
     },
@@ -22,4 +27,4 @@ const addTask = mongo.Schema(
   }
 );
 
-module.exports = mongo.model("information", addTask);
+module.exports = mongo.model("bookmark", bookMark);

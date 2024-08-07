@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/v1/signup", require("./growth/router/auth"))
-app.use("/api/v1/info", require("./growth/router/addTask"));
+app.use("/api/v1/bookmark", require("./growth/router/addTask"));
 
 
 app.use(errorMiddle)
