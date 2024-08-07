@@ -1,8 +1,46 @@
 const mongo = require("mongoose");
 
-const groth = mongo.Schema({
-  taskName: {
-    type: String,
-    require: [true, "Please enter task name"],
+const growth = mongo.Schema(
+  {
+    taskName: {
+      type: String,
+      require: [true, "Please enter task name"],
+    },
+
+    taskDesc: {
+      type: String,
+    },
+
+    taskLink: {
+      type: String,
+    },
+
+    startDate: {
+      type: String,
+      require: [true, "Please enter start date"],
+    },
+
+    endDate: {
+      type: String,
+      require: [true, "Please enter end date"],
+    },
+
+    startTime: {
+      type: String,
+      require: [true, "Please enter start time"],
+    },
+
+    endTime: {
+      type: String,
+      require: [true, "Please enter end time"],
+    },
+
+    reminder: {
+      type: String,
+      default: false,
+    },
   },
-});
+  {
+    timestamps: true,
+  }
+);
