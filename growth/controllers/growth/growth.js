@@ -41,7 +41,18 @@ const addGrowth = asyncNow(async (req, res) => {
 });
 
 const editGrowth = asyncNow(async (req, res) => {
-  // const growth = await
+  const growth = await Growth.findById(req.params.id);
+
+  if (!growth) {
+    res.status(400);
+    throw new Error("Not Found");
+  }
+
+  const updateGrowth = await Growth.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
+
+  res.status(200).json(updateGrowth);
 });
 
 const getSingleGoal = asyncNow(async (req, res) => {
@@ -75,4 +86,5 @@ module.exports = {
   addGrowth,
   deleteGrowth,
   getSingleGoal,
+  editGrowth,
 };
