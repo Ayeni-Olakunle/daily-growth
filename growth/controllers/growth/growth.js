@@ -40,6 +40,21 @@ const addGrowth = asyncNow(async (req, res) => {
   res.status(201).json(addGrowth);
 });
 
+const editGrowth = asyncNow(async (req, res) => {
+  // const growth = await
+});
+
+const getSingleGoal = asyncNow(async (req, res) => {
+  const growth = await Growth.findById(req.params.id);
+
+  if (!growth) {
+    res.status(400);
+    throw new Error("Not Found");
+  }
+
+  res.status(200).json(growth);
+});
+
 const deleteGrowth = asyncNow(async (req, res) => {
   const growth = await Growth.findById(req.params.id);
 
@@ -47,9 +62,17 @@ const deleteGrowth = asyncNow(async (req, res) => {
     res.status(400);
     throw new Error("Not Found");
   }
+
+  await growth.deleteOne();
+
+  res.status(200).json({
+    message: `Successfully deleted goal with the id ${req.params.id}`,
+  });
 });
 
 module.exports = {
   allGrowth,
   addGrowth,
+  deleteGrowth,
+  getSingleGoal,
 };
