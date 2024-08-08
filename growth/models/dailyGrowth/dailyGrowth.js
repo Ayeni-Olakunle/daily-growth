@@ -35,8 +35,13 @@ const growth = mongo.Schema(
       require: [true, "Please enter end time"],
     },
 
+    status: {
+      type: Boolean,
+      default: false,
+    },
+
     reminder: {
-      type: String,
+      type: Boolean,
       default: false,
     },
   },
@@ -44,3 +49,5 @@ const growth = mongo.Schema(
     timestamps: true,
   }
 );
+
+module.exports = mongo.model("groth", growth);
