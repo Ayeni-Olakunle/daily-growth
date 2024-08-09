@@ -10,14 +10,14 @@ const getAllUser = asyncNow(async (req, res) => {
 
 const signupUser = asyncNow(async (req, res) => {
   const { firstName, lastName, email, phoneNumber, password } = req.body;
-  const userExist = await signupModel.findById(req.params.id);
+  const userExist = await signupModel.findOne({ email });
 
   if (!firstName && !lastName && !email && !phoneNumber && !password) {
     res.status(400);
     throw new Error("Fill all required field");
   }
 
-  if (!userExist) {
+  if (userExist) {
     res.status(400);
     throw new Error("User already exist");
   }

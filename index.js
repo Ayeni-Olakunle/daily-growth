@@ -19,7 +19,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/api/v1/signup", require("./growth/router/auth"));
+app.use("/api/v1/auth", require("./growth/router/auth"));
 app.use("/api/v1/bookmark", require("./growth/router/addTask"));
 app.use("/api/v1/growth", require("./growth/router/growth"));
 
