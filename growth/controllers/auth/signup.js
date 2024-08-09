@@ -54,20 +54,29 @@ const userLogin = asyncNow(async (req, res) => {
 });
 
 const editUser = asyncNow(async (req, res) => {
-  const user = await signupModel.findById(req.params.id);
+    const { firstName, lastName, email, phoneNumber, password } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = await signupModel.findById(req.params.id);
 
-  if (user) {
-    const updateUser = await signupModel.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    if (user) {
+      const updateUser = await signupModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          phoneNumber: phoneNumber,
+          password: hashedPassword,
+        },
+        { new: true }
+      );
 
-    res.status(200).json(updateUser);
-  } else {
-    res.status(400);
-    throw new Error("user does not exist");
-  }
+      res.status(200).json(updateUser);
+    } else {
+      res.status(400);
+      throw new Error("user does not exist");
+    }
 });
 
 module.exports = {
