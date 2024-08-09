@@ -41,7 +41,38 @@ const signupUser = asyncNow(async (req, res) => {
   }
 });
 
+const userLogin = asyncNow(async (req, res) => {
+  const { email, password } = req.body;
+  const user = await signupModel.findOne({ email });
+
+  if (email && (await bcrypt.compare(password, user.password))) {
+    res.status(200).json(user);
+  } else {
+    res.status(400);
+    throw new Error("user does not exist");
+  }
+});
+
+const editUser = asyncNow(async (req, res) => {
+  const user = await signupModel.findById(req.params.id);
+
+  if (user) {
+    const updateUser = await signupModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.status(200).json(updateUser);
+  } else {
+    res.status(400);
+    throw new Error("user does not exist");
+  }
+});
+
 module.exports = {
   getAllUser,
   signupUser,
+  userLogin,
+  editUser,
 };
