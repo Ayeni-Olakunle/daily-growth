@@ -2,6 +2,12 @@ const mongo = require("mongoose");
 
 const growth = mongo.Schema(
   {
+    user: {
+      type: mongo.Schema.Types.ObjectId,
+      require: true,
+      ref: "signup",
+    },
+
     taskName: {
       type: String,
       require: [true, "Please enter task name"],
