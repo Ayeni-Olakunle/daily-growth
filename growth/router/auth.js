@@ -9,7 +9,7 @@ const {
 
 signup.route("/signup").post(signupUser);
 signup.route("/login").post(userLogin);
-signup.route("/update-user").patch(getAllUser);
+signup.route("/update-user/:id").patch(editUser);
 signup.route("/user").get(getAllUser);
 
 module.exports = signup;
