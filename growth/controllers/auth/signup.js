@@ -4,14 +4,21 @@ const asyncNow = require("express-async-handler");
 const signupModel = require("../../models/auth/signup");
 
 const getUser = asyncNow(async (req, res) => {
-  const user = await signupModel.findById(req.params.id);
+  const user = await signupModel.findById(req.signupModel.id);
 
   if (!user) {
     res.status(404);
     throw new Error("Not Found");
   }
 
-  res.status(200).json(user);
+  res.status(200).json({
+    id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    phoneNumber: phoneNumber,
+    toke: generateToken(user._id),
+  });
 
   //   if (user) {
   //     res.status(200).json(user);
@@ -47,7 +54,14 @@ const signupUser = asyncNow(async (req, res) => {
   });
 
   if (user) {
-    res.status(201).json(user);
+    res.status(201).json({
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phoneNumber: phoneNumber,
+      toke: generateToken(user._id),
+    });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -59,7 +73,14 @@ const userLogin = asyncNow(async (req, res) => {
   const user = await signupModel.findOne({ email });
 
   if (email && (await bcrypt.compare(password, user.password))) {
-    res.status(200).json(user);
+    res.status(200).json({
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      toke: generateToken(user._id),
+    });
   } else {
     res.status(400);
     throw new Error("user does not exist");
@@ -85,12 +106,22 @@ const editUser = asyncNow(async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json(updateUser);
+    res.status(200).json({
+      firstName: updateUser.firstName,
+      lastName: updateUser.lastName,
+      email: updateUser.email,
+      phoneNumber: phoneNumber,
+      toke: generateToken(updateUser._id),
+    });
   } else {
     res.status(400);
     throw new Error("user does not exist");
   }
 });
+
+const generateToken = (id) => {
+  return jsonwebtoken.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+};
 
 module.exports = {
   getUser,

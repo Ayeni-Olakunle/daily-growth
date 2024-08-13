@@ -5,7 +5,7 @@ const growth = mongo.Schema(
     user: {
       type: mongo.Schema.Types.ObjectId,
       require: true,
-      ref: "signup",
+      ref: "signups",
     },
 
     taskName: {

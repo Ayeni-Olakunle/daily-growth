@@ -7,11 +7,12 @@ const {
   getOneBookMark,
   editBookMark,
 } = require("../controllers/addInfo/addInfo");
+const { protect } = require("../middleware/authMiddle");
 
-info.route("/").get(getAllInfo);
-info.route("/create").post(addBookmark);
-info.route("/edit-bookmark/:id").patch(editBookMark);
-info.route("/delete/:id").delete(deleteBookMark);
-info.route("/single-bookmark/:id").get(getOneBookMark);
+info.route("/").get(protect, getAllInfo);
+info.route("/create").post(protect, addBookmark);
+info.route("/edit-bookmark/:id").patch(protect, editBookMark);
+info.route("/delete/:id").delete(protect, deleteBookMark);
+info.route("/single-bookmark/:id").get(protect, getOneBookMark);
 
 module.exports = info;

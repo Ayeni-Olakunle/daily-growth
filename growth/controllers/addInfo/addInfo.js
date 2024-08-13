@@ -2,7 +2,7 @@ const asyncNow = require("express-async-handler");
 const bookMark = require("../../models/addInfo/addInfo");
 
 const getAllInfo = asyncNow(async (req, res) => {
-  const bookMarks = await bookMark.find();
+  const bookMarks = await bookMark.find({ user: req.user.id });
   res.status(200).json(bookMarks);
 });
 
