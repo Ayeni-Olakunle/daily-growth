@@ -3,9 +3,22 @@ const bcrypt = require("bcryptjs");
 const asyncNow = require("express-async-handler");
 const signupModel = require("../../models/auth/signup");
 
-const getAllUser = asyncNow(async (req, res) => {
-  const allUser = await signupModel.find();
-  res.status(200).json(allUser);
+const getUser = asyncNow(async (req, res) => {
+  const user = await signupModel.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("Not Found");
+  }
+
+  res.status(200).json(user);
+
+  //   if (user) {
+  //     res.status(200).json(user);
+  //   } else {
+  //     res.status(400);
+  //     throw new Error("user doesn't exist");
+  //   }
 });
 
 const signupUser = asyncNow(async (req, res) => {
@@ -54,33 +67,33 @@ const userLogin = asyncNow(async (req, res) => {
 });
 
 const editUser = asyncNow(async (req, res) => {
-    const { firstName, lastName, email, phoneNumber, password } = req.body;
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await signupModel.findById(req.params.id);
+  const { firstName, lastName, email, phoneNumber, password } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  const user = await signupModel.findById(req.params.id);
 
-    if (user) {
-      const updateUser = await signupModel.findByIdAndUpdate(
-        req.params.id,
-        {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          phoneNumber: phoneNumber,
-          password: hashedPassword,
-        },
-        { new: true }
-      );
+  if (user) {
+    const updateUser = await signupModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phoneNumber: phoneNumber,
+        password: hashedPassword,
+      },
+      { new: true }
+    );
 
-      res.status(200).json(updateUser);
-    } else {
-      res.status(400);
-      throw new Error("user does not exist");
-    }
+    res.status(200).json(updateUser);
+  } else {
+    res.status(400);
+    throw new Error("user does not exist");
+  }
 });
 
 module.exports = {
-  getAllUser,
+  getUser,
   signupUser,
   userLogin,
   editUser,

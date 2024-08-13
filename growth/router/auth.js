@@ -1,7 +1,7 @@
 const express = require("express");
 const signup = express.Router();
 const {
-  getAllUser,
+  getUser,
   signupUser,
   userLogin,
   editUser,
@@ -10,6 +10,6 @@ const {
 signup.route("/signup").post(signupUser);
 signup.route("/login").post(userLogin);
 signup.route("/update-user/:id").patch(editUser);
-signup.route("/user").get(getAllUser);
+signup.route("/user/:id").get(getUser);
 
 module.exports = signup;
