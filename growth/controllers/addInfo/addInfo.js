@@ -19,6 +19,7 @@ const addBookmark = asyncNow(async (req, res) => {
     bookMarkLink: bookMarkLink,
     bookMarkValue: bookMarkValue,
     bookMarkDesc: bookMarkDesc,
+    user: req.user.id,
   });
 
   res.status(201).json(addUp);
@@ -40,14 +41,20 @@ const editBookMark = asyncNow(async (req, res) => {
 });
 
 const getOneBookMark = asyncNow(async (req, res) => {
-  const oneBookMark = await bookMark.findById(req.params.id);
+  try {
+    const oneBookMark = await bookMark.findById(req.params.id);
+    console.log(oneBookMark);
 
-  if (!oneBookMark) {
-    res.status(404);
-    throw new Error("Not Found");
+    if (oneBookMark) {
+      res.status(200).json(oneBookMark);
+    } else {
+      res.status(404);
+      throw new Error("Not Found");
+    }
+  } catch (error) {
+    res.status(500);
+    throw new Error("Something went wrong");
   }
-
-  res.status(200).json(oneBookMark);
 });
 
 const deleteBookMark = asyncNow(async (req, res) => {

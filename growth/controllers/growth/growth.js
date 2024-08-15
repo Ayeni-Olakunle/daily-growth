@@ -2,7 +2,7 @@ const asyncNow = require("express-async-handler");
 const Growth = require("../../models/dailyGrowth/dailyGrowth");
 
 const allGrowth = asyncNow(async (req, res) => {
-  const growth = await Growth.find();
+  const growth = await Growth.find({ user: req.user.id });
 
   res.status(200).json(growth);
 });
@@ -35,6 +35,7 @@ const addGrowth = asyncNow(async (req, res) => {
     endTime: endTime,
     reminder: reminder,
     status: status,
+    user: req.user.id,
   });
 
   res.status(201).json(addGrowth);

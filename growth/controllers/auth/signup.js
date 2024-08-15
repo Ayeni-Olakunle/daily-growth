@@ -4,20 +4,22 @@ const asyncNow = require("express-async-handler");
 const signupModel = require("../../models/auth/signup");
 
 const getUser = asyncNow(async (req, res) => {
-  const user = await signupModel.findById(req.signupModel.id);
+  const { _id, firstName, lastName, email, phoneNumber } =
+    await signupModel.findById(req.user.id);
 
-  if (!user) {
-    res.status(404);
-    throw new Error("Not Found");
-  }
+  // if (user) {
+  //   res.status(404);
+  //   throw new Error("Not Found");
+  // }
 
   res.status(200).json({
-    id: user._id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    phoneNumber: phoneNumber,
-    toke: generateToken(user._id),
+    user: req.user.id,
+    _id,
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    toke: generateToken(_id),
   });
 
   //   if (user) {
@@ -69,7 +71,8 @@ const signupUser = asyncNow(async (req, res) => {
 });
 
 const userLogin = asyncNow(async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
   const user = await signupModel.findOne({ email });
 
   if (email && (await bcrypt.compare(password, user.password))) {
@@ -85,37 +88,48 @@ const userLogin = asyncNow(async (req, res) => {
     res.status(400);
     throw new Error("user does not exist");
   }
+    
+  } catch (error) {
+    res.status(400);
+    throw new Error(`Opps something went wrong ${error}`);
+  }
 });
 
 const editUser = asyncNow(async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, password } = req.body;
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  const user = await signupModel.findById(req.params.id);
+  try {
+    const user = await signupModel.findById(req.params.id);
+    const { firstName, lastName, email, phoneNumber, password } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    // const hashedPassword = await bcrypt.hash(password, salt);
 
-  if (user) {
-    const updateUser = await signupModel.findByIdAndUpdate(
-      req.params.id,
-      {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
+    if (user) {
+      const updateUser = await signupModel.findByIdAndUpdate(
+        req.user.id,
+        {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          phoneNumber: phoneNumber,
+          password: password,
+          // password: hashedPassword,
+        },
+        { new: true }
+      );
+
+      res.status(200).json({
+        firstName: updateUser.firstName,
+        lastName: updateUser.lastName,
+        email: updateUser.email,
         phoneNumber: phoneNumber,
-        password: hashedPassword,
-      },
-      { new: true }
-    );
+        toke: generateToken(updateUser._id),
+      });
 
-    res.status(200).json({
-      firstName: updateUser.firstName,
-      lastName: updateUser.lastName,
-      email: updateUser.email,
-      phoneNumber: phoneNumber,
-      toke: generateToken(updateUser._id),
-    });
-  } else {
-    res.status(400);
-    throw new Error("user does not exist");
+      // res.status(200).json({ massge: "user exist" });
+    } else {
+      res.status(404).json({ massge: "user does not exist" });
+    }
+  } catch (error) {
+    res.status(500).json({ massge: "something went wrong" });
   }
 });
 
