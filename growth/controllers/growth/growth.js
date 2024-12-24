@@ -9,9 +9,9 @@ const allGrowth = asyncNow(async (req, res) => {
 
 const addGrowth = asyncNow(async (req, res) => {
   const {
-    taskName,
-    taskDesc,
-    taskLink,
+    goalName,
+    goalDesc,
+    goalLink,
     startDate,
     endDate,
     startTime,
@@ -20,15 +20,15 @@ const addGrowth = asyncNow(async (req, res) => {
     status,
   } = req.body;
 
-  if (!taskName && !startDate && !endDate && !startTime && !endTime) {
+  if (!goalName && !startDate && !endDate && !startTime && !endTime) {
     res.status(400);
     throw new Error("");
   }
 
   const addGrowth = await Growth.create({
-    taskName: taskName,
-    taskDesc: taskDesc,
-    taskLink: taskLink,
+    goalName: goalName,
+    goalDesc: goalDesc,
+    goalLink: goalLink,
     startDate: startDate,
     endDate: endDate,
     startTime: startTime,

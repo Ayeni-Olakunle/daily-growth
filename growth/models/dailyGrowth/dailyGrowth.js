@@ -8,16 +8,16 @@ const growth = mongo.Schema(
       ref: "signups",
     },
 
-    taskName: {
+    goalName: {
       type: String,
       require: [true, "Please enter task name"],
     },
 
-    taskDesc: {
+    goalDesc: {
       type: String,
     },
 
-    taskLink: {
+    goalLink: {
       type: String,
     },
 
@@ -42,8 +42,9 @@ const growth = mongo.Schema(
     },
 
     status: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "Not Started",
+      require: [true, "Please goal status"],
     },
 
     reminder: {
